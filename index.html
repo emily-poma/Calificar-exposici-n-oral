@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Instrumentos de Evaluación Interactivos (Escala 1-10)</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            color: #333;
+            margin: 30px auto;
+            max-width: 1000px;
+            padding: 20px;
+            background-color: #f4f6f7;
+        }
+        .container {
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            margin-bottom: 40px;
+        }
+        h1 {
+            font-size: 16pt;
+            color: #2c3e50;
+            text-align: center;
+            border-bottom: 2px solid #34495e;
+            padding-bottom: 10px;
+            margin-top: 0;
+        }
+        .header-table, .eval-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        .header-table td {
+            border: 1px solid #bdc3c7;
+            padding: 8px;
+        }
+        .header-table td.label {
+            background-color: #f2f4f4;
+            font-weight: bold;
+            width: 25%;
+        }
+        .header-table input[type="text"] {
+            width: 100%;
+            border: none;
+            outline: none;
+            font-size: 11pt;
+            padding: 4px;
+        }
+        .instructions {
+            margin-bottom: 15px;
+            font-style: italic;
+            color: #555;
+            background-color: #fcf3cf;
+            padding: 10px;
+            border-left: 5px solid #f1c40f;
+        }
+        .eval-table th {
+            background-color: #34495e;
+            color: #ffffff;
+            padding: 10px;
+            border: 1px solid #2c3e50;
+            text-align: left;
+        }
+        .eval-table th.center, .eval-table td.center {
+            text-align: center;
+            width: 50px;
+        }
+        .eval-table td {
+            padding: 10px;
+            border: 1px solid #bdc3c7;
+            vertical-align: middle;
+        }
+        .eval-table tr:nth-child(even) td {
+            background-color: #f9f9f9;
+        }
+        input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+        /* CORREGIDO: Banner con texto oscuro y visible */
+        .section-banner {
+            background-color: #d5dbdb;
+            color: #1c2833;
+            font-weight: bold;
+            text-align: center;
+            padding: 10px;
+            font-size: 11pt;
+            letter-spacing: 1px;
+        }
+        .rubric-cell {
+            font-size: 9pt;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .rubric-cell:hover {
+            background-color: #e8f4f8 !important;
+        }
+        .rubric-cell.selected {
+            background-color: #d4efdf !important;
+            border: 2px solid #27ae60;
+            font-weight: bold;
+        }
+        textarea {
+            width: 100%;
+            height: 80px;
+            border: 1px solid #bdc3c7;
+            border-radius: 4px;
+            padding: 8px;
+            resize: vertical;
+            font-family: inherit;
+        }
+        .valoracion-box {
+            margin-top: 20px;
+            border: 2px solid #2980b9;
+            background-color: #ebf5fb;
+            padding: 15px;
+            border-radius: 6px;
+        }
+        .valoracion-title {
+            font-weight: bold;
+            color: #1b4f72;
+            font-size: 12pt;
+            margin-bottom: 8px;
+        }
+        .calificacion-destacada {
+            font-size: 14pt;
+            color: #27ae60;
+            font-weight: bold;
+            background-color: #ffffff;
+            padding: 4px 8px;
+            border-radius: 4px;
+            border: 1px solid #27ae60;
+            display: inline-block;
+        }
+        .btn-print {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #2980b9;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 11pt;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            font-weight: bold;
+        }
+        .btn-print:hover {
+            background-color: #21618c;
+        }
+        @media print {
+            body { background-color: #fff; margin: 0; padding: 0; }
+            .container { box-shadow: none; padding: 0; margin-bottom: 50px; page-break-after: always; }
+            .btn-print { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Tabla 1. Lista de cotejo para la evaluación de una exposición oral individual</h1>
+        
+        <table class="header-table">
+            <tr>
+                <td class="label">Nombre del expositor:</td>
+                <td><input type="text" placeholder="Escribe aquí el nombre..."></td>
+            </tr>
+            <tr>
+                <td class="label">Tema:</td>
+                <td><input type="text" placeholder="Escribe el tema..."></td>
+            </tr>
+            <tr>
+                <td class="label">Objetivo de aprendizaje:</td>
+                <td><input type="text" placeholder="Escribe el objetivo..."></td>
+            </tr>
+        </table>
+
+        <div class="instructions">
+            <strong>Instrucciones:</strong> Marque "Sí" o "No" según corresponda. La nota final se calcula sobre 10 de manera automática aplicando la regla de tres.
+        </div>
+
+        <table class="eval-table">
+            <thead>
+                <tr>
+                    <th class="center">Sí</th>
+                    <th class="center">No</th>
+                    <th>Criterios de evaluación del desempeño en una exposición oral individual</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="center"><input type="checkbox" class="check-ind" data-tipo="si" onclick="controlarCheck(this)"></td>
+                    <td class="center"><input type="checkbox" class="check-ind" data-tipo="no" onclick="controlarCheck(this)"></td>
+                    <td>El contenido de la exposición es coherentemente claro.</td>
+                </tr>
+                <tr>
+                    <td class="center"><input type="checkbox" class="check-ind" data-tipo="si" onclick="controlarCheck(this)"></td>
+                    <td class="center"><input type="checkbox" class="check-ind" data-tipo="no" onclick="controlarCheck(this)"></td>
+                    <td>Domina el tema de exposición.</td>
+                </tr>
+                <tr>
+                    <td class="center"><input type="checkbox" class="check-ind" data-tipo="si" onclick="controlarCheck(this)"></td>
+                    <td class="center"><input type="checkbox" class="check-ind" data-tipo="no" onclick="controlarCheck(this)"></td>
+                    <td>Utiliza argumentos de calidad.</td>
+                </tr>
+                <tr>
+                    <td class="center"><input type="checkbox" class="check-ind" data-tipo="si" onclick="controlarCheck(this)"></td>
+                    <td class="center"><input type="checkbox" class="check-ind" data-tipo="no" onclick="controlarCheck(this)"></td>
+                    <td>Analiza y sintetiza la información.</td>
+                </tr>
+                <tr>
+                    <td class="center"><input type="checkbox" class="check-ind" data-tipo="si" onclick="controlarCheck(this)"></td>
+                    <td class="center"><input type="checkbox" class="check-ind" data-tipo="no" onclick="controlarCheck(this)"></td>
+                    <td>Habla de manera clara y fluida frente a la audiencia.</td>
+                </tr>
+                <tr>
+                    <td class="center"><input type="checkbox" class="check-ind" data-tipo="si" onclick="controlarCheck(this)"></td>
+                    <td class="center"><input type="checkbox" class="check-ind" data-tipo="no" onclick="controlarCheck(this)"></td>
+                    <td>La expresión corporal es adecuada (postura, gesticulaciones, movimientos de mano y contacto visual).</td>
+                </tr>
+                <tr>
+                    <td class="center"><input type="checkbox" class="check-ind" data-tipo="si" onclick="controlarCheck(this)"></td>
+                    <td class="center"><input type="checkbox" class="check-ind" data-tipo="no" onclick="controlarCheck(this)"></td>
+                    <td>Gestiona y controla el tiempo de exposición.</td>
+                </tr>
+                <tr>
+                    <td class="center"><input type="checkbox" class="check-ind" data-tipo="si" onclick="controlarCheck(this)"></td>
+                    <td class="center"><input type="checkbox" class="check-ind" data-tipo="no" onclick="controlarCheck(this)"></td>
+                    <td>Propicia un ambiente adecuado (capta la atención de sus compañeros).</td>
+                </tr>
+                <tr>
+                    <td class="center"><input type="checkbox" class="check-ind" data-tipo="si" onclick="controlarCheck(this)"></td>
+                    <td class="center"><input type="checkbox" class="check-ind" data-tipo="no" onclick="controlarCheck(this)"></td>
+                    <td>Existe relación del discurso con los recursos de apoyo que utiliza.</td>
+                </tr>
+                <tr>
+                    <td class="center"><input type="checkbox" class="check-ind" data-tipo="si" onclick="controlarCheck(this)"></td>
+                    <td class="center"><input type="checkbox" class="check-ind" data-tipo="no" onclick="controlarCheck(this)"></td>
+                    <td>Maneja adecuadamente los medios o recursos de apoyo.</td>
+                </tr>
+                <tr>
+                    <td class="center"><input type="checkbox" class="check-ind" data-tipo="si" onclick="controlarCheck(this)"></td>
+                    <td class="center"><input type="checkbox" class="check-ind" data-tipo="no" onclick="controlarCheck(this)"></td>
+                    <td>La calidad visual de los medios o recursos de apoyo es buena.</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div style="margin-bottom: 15px;">
+            <strong>Observaciones:</strong><br>
+            <textarea placeholder="Escribe aquí los comentarios u observaciones..."></textarea>
+        </div>
+
+        <div class="valoracion-box">
+            <div class="valoracion-title">Valoración Final (Individual)</div>
+            <p><strong>Puntaje:</strong> <span id="total-ind">0</span> / 11 criterios cumplidos | <strong>Porcentaje de logro:</strong> <span id="porcentaje-ind">0%</span></p>
+            <p><strong>Regla de 3:</strong> (Puntaje obtenido × 10) ÷ 11</p>
+            <p><strong>Calificación Final:</strong> <span class="calificacion-destacada" id="nota-ind">0.00</span> / 10</p>
+        </div>
+    </div>
+
+
+    <div class="container">
+        <h1>Tabla 2. Lista de cotejo para la evaluación de una exposición oral grupal</h1>
+        
+        <table class="header-table">
+            <tr>
+                <td class="label">Nombre de los expositores:</td>
+                <td><input type="text" placeholder="Escribe los integrantes del grupo..."></td>
+            </tr>
+            <tr>
+                <td class="label">Tema:</td>
+                <td><input type="text" placeholder="Escribe el tema..."></td>
+            </tr>
+            <tr>
+                <td class="label">Objetivo de aprendizaje:</td>
+                <td><input type="text" placeholder="Escribe el objetivo..."></td>
+            </tr>
+        </table>
+
+        <div class="instructions">
+            <strong>Instrucciones:</strong> Marque "Sí" o "No" según corresponda. La nota final se calcula sobre 10 automáticamente.
+        </div>
+
+        <table class="eval-table">
+            <thead>
+                <tr>
+                    <th class="center">Sí</th>
+                    <th class="center">No</th>
+                    <th>Criterios de evaluación del desempeño en una exposición oral grupal</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="center"><input type="checkbox" class="check-grup" data-tipo="si" onclick="controlarCheck(this)"></td>
+                    <td class="center"><input type="checkbox" class="check-grup" data-tipo="no" onclick="controlarCheck(this)"></td>
+                    <td>El contenido de la exposición es coherente y claro.</td>
+                </tr>
+                <tr>
+                    <td class="center"><input type="checkbox" class="check-grup" data-tipo="si" onclick="controlarCheck(this)"></td>
+                    <td class="center"><input type="checkbox" class="check-grup" data-tipo="no" onclick="controlarCheck(this)"></td>
+                    <td>Dominan el tema de exposición.</td>
+                </tr>
+                <tr>
+                    <td class="center"><input type="checkbox" class="check-grup" data-tipo="si" onclick="controlarCheck(this)"></td>
+                    <td class="center"><input type="checkbox" class="check-grup" data-tipo="no" onclick="controlarCheck(this)"></td>
+                    <td>Utilizan argumentos de calidad.</td>
+                </tr>
+                <tr>
+                    <td class="center"><input type="checkbox" class="check-grup" data-tipo="si" onclick="controlarCheck(this)"></td>
+                    <td class="center"><input type="checkbox" class="check-grup" data-tipo="no" onclick="controlarCheck(this)"></td>
+                    <td>Analizan y sintetizan la información.</td>
+                </tr>
+                <tr>
+                    <td class="center"><input type="checkbox" class="check-grup" data-tipo="si" onclick="controlarCheck(this)"></td>
+                    <td class="center"><input type="checkbox" class="check-grup" data-tipo="no" onclick="controlarCheck(this)"></td>
+                    <td>Hablan de manera clara y fluida frente a la audiencia.</td>
+                </tr>
+                <tr>
+                    <td class="center"><input type="checkbox" class="check-grup" data-tipo="si" onclick="controlarCheck(this)"></td>
+                    <td class="center"><input type="checkbox" class="check-grup" data-tipo="no" onclick="controlarCheck(this)"></td>
+                    <td>La expresión corporal es adecuada (postura, gesticulaciones, movimientos de mano y contacto visual).</td>
+                </tr>
+                <tr>
+                    <td class="center"><input type="checkbox" class="check-grup" data-tipo="si" onclick="controlarCheck(this)"></td>
+                    <td class="center"><input type="checkbox" class="check-grup" data-tipo="no" onclick="controlarCheck(this)"></td>
+                    <td>Gestionan y controlan el tiempo de exposición.</td>
+                </tr>
+                <tr>
+                    <td class="center"><input type="checkbox" class="check-grup" data-tipo="si" onclick="controlarCheck(this)"></td>
+                    <td class="center"><input type="checkbox" class="check-grup" data-tipo="no" onclick="controlarCheck(this)"></td>
+                    <td>Propician un ambiente adecuado (captan la atención de sus compañeros).</td>
+                </tr>
+                <tr>
+                    <td class="center"><input type="checkbox" class="check-grup" data-tipo="si" onclick="controlarCheck(this)"></td>
+                    <td class="center"><input type="checkbox" class="check-grup" data-tipo="no" onclick="controlarCheck(this)"></td>
+                    <td>Se observa trabajo en equipo durante la exposición.</td>
+                </tr>
+                <tr>
+                    <td class="center"><input type="checkbox" class="check-grup" data-tipo="si" onclick="controlarCheck(this)"></td>
+                    <td class="center"><input type="checkbox" class="check-grup" data-tipo="no" onclick="controlarCheck(this)"></td>
+                    <td>Existe coordinación entre los integrantes del equipo al momento de hablar.</td>
+                </tr>
+                <tr>
+                    <td class="center"><input type="checkbox" class="check-grup" data-tipo="si" onclick="controlarCheck(this)"></td>
+                    <td class="center"><input type="checkbox" class="check-grup" data-tipo="no" onclick="controlarCheck(this)"></td>
+                    <td>Respetan una secuencia durante la exposición.</td>
+                </tr>
+                <tr>
+                    <td class="center"><input type="checkbox" class="check-grup" data-tipo="si" onclick="controlarCheck(this)"></td>
+                    <td class="center"><input type="checkbox" class="check-grup" data-tipo="no" onclick="controlarCheck(this)"></td>
+                    <td>Existe relación del discurso con los recursos de apoyo que utilizan.</td>
+                </tr>
+                <tr>
+                    <td class="center"><input type="checkbox" class="check-grup" data-tipo="si" onclick="controlarCheck(this)"></td>
+                    <td class="center"><input type="checkbox" class="check-grup" data-tipo="no" onclick="controlarCheck(this)"></td>
+                    <td>Manejan adecuadamente los medios o recursos de apoyo.</td>
+                </tr>
+                <tr>
+                    <td class="center"><input type="checkbox" class="check-grup" data-tipo="si" onclick="controlarCheck(this)"></td>
+                    <td class="center"><input type="checkbox" class="check-grup" data-tipo="no" onclick="controlarCheck(this)"></td>
+                    <td>La calidad visual de los medios o recursos de apoyo es buena.</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div style="margin-bottom: 15px;">
+            <strong>Observaciones:</strong><br>
+            <textarea placeholder="Escribe aquí los comentarios u observaciones grupales..."></textarea>
+        </div>
+
+        <div class="valoracion-box">
+            <div class="valoracion-title">Valoración Final (Grupal)</div>
+            <p><strong>Puntaje:</strong> <span id="total-grup">0</span> / 14 criterios cumplidos | <strong>Porcentaje de logro:</strong> <span id="porcentaje-grup">0%</span></p>
+            <p><strong>Regla de 3:</strong> (Puntaje obtenido × 10) ÷ 14</p>
+            <p><strong>Calificación Final:</strong> <span class="calificacion-destacada" id="nota-grup">0.00</span> / 10</p>
+        </div>
+    </div>
+
+
+    <div class="container">
+        <h1>Rúbrica de Evaluación de la Exposición Oral</h1>
+        
+        <div class="instructions">
+            <strong>Instrucciones interactiva:</strong> Haz <strong>clic directamente sobre el cuadro</strong> descriptivo del nivel alcanzado. El sistema calculará la nota sobre 10 usando la regla de tres de acuerdo al tipo seleccionado (Individual o Grupal).
+        </div>
+
+        <table class="eval-table">
+            <thead>
+                <tr>
+                    <th style="width: 20%;">Aspectos a evaluar</th>
+                    <th class="center" style="width: 20%;">Excelente (4 pts)</th>
+                    <th class="center" style="width: 20%;">Satisfactorio (3 pts)</th>
+                    <th class="center" style="width: 20%;">Suficiente (2 pts)</th>
+                    <th class="center" style="width: 20%;">Deficiente (1 pt)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td colspan="5" class="section-banner">TEMA A DESARROLLAR</td></tr>
+                <tr class="rubric-row">
+                    <td style="font-weight: bold;">Organización del contenido</td>
+                    <td class="rubric-cell" data-pts="4">Secuencia lógica y coherente. Ideas claras y precisas.</td>
+                    <td class="rubric-cell" data-pts="3">Secuencia lógica. Algunas ideas son ambiguas e imprecisas.</td>
+                    <td class="rubric-cell" data-pts="2">A veces no muestra secuencia lógica. Ideas ambiguas.</td>
+                    <td class="rubric-cell" data-pts="1">Sin secuencia lógica ni coherencia. Ideas muy ambiguas.</td>
+                </tr>
+                <tr class="rubric-row">
+                    <td style="font-weight: bold;">Bibliografía y fuentes</td>
+                    <td class="rubric-cell" data-pts="4">Fuentes confiables y actuales (últimos 5 años). Relacionadas al tema.</td>
+                    <td class="rubric-cell" data-pts="3">Fuentes confiables, pero con más de 5 años de antigüedad.</td>
+                    <td class="rubric-cell" data-pts="2">Algunas fuentes son poco confiables y desactualizadas.</td>
+                    <td class="rubric-cell" data-pts="1">La mayoría son fuentes poco confiables y desactualizadas.</td>
+                </tr>
+
+                <tr><td colspan="5" class="section-banner">HABILIDADES</td></tr>
+                <tr class="rubric-row">
+                    <td style="font-weight: bold;">Análisis y síntesis</td>
+                    <td class="rubric-cell" data-pts="4">Ordenado, enfatiza ideas clave, usa conocimientos previos y resume bien construyendo puntos de vista.</td>
+                    <td class="rubric-cell" data-pts="3">Ordenado, enfatiza ideas principales, utiliza conocimientos previos y resume la información.</td>
+                    <td class="rubric-cell" data-pts="2">Presentación ordenada, pero solo resume las ideas principales tratadas.</td>
+                    <td class="rubric-cell" data-pts="1">No es ordenado ni es capaz de resumir la exposición.</td>
+                </tr>
+                <tr class="rubric-row">
+                    <td style="font-weight: bold;">Manejo de grupo</td>
+                    <td class="rubric-cell" data-pts="4">Lleva la sesión de forma autónoma, modera compañeros. Intervención docente mínima.</td>
+                    <td class="rubric-cell" data-pts="3">Lleva la sesión y modera medianamente. Intervención docente media.</td>
+                    <td class="rubric-cell" data-pts="2">Lleva la sesión pero no modera la participación. Intervención docente alta.</td>
+                    <td class="rubric-cell" data-pts="1">No lleva la sesión. El docente interviene todo el tiempo para dar orden en el aula.</td>
+                </tr>
+
+                <tr><td colspan="5" class="section-banner">RECURSOS DE APOYO</td></tr>
+                <tr class="rubric-row">
+                    <td style="font-weight: bold;">Relación del discurso</td>
+                    <td class="rubric-cell" data-pts="4">Recursos empleados para ejemplificar y reforzar argumentos con éxito.</td>
+                    <td class="rubric-cell" data-pts="3">Recursos utilizados únicamente para aclarar conceptos aislados.</td>
+                    <td class="rubric-cell" data-pts="2">Los medios contribuyen poco al tema y no resultan tan efectivos.</td>
+                    <td class="rubric-cell" data-pts="1">Emplea pocos recursos y no son acertados para el contenido expuesto.</td>
+                </tr>
+                <tr class="rubric-row">
+                    <td style="font-weight: bold;">Calidad visual</td>
+                    <td class="rubric-cell" data-pts="4">Visualmente atractivos, interactivos y con ideas fundamentales del tema.</td>
+                    <td class="rubric-cell" data-pts="3">Reflejan organización, pero no son atractivos ni interactivos con la audiencia.</td>
+                    <td class="rubric-cell" data-pts="2">Presentan sobrecarga de información, deficiencias visuales y relación difusa.</td>
+                    <td class="rubric-cell" data-pts="1">Estructura que dificulta la lectura, cero interactividad y desviado del tema.</td>
+                </tr>
+
+                <tr><td colspan="5" class="section-banner">SI SE TRATA DE UNA ACTIVIDAD GRUPAL</td></tr>
+                <tr class="rubric-row optional-row">
+                    <td style="font-weight: bold;">Coordinación grupal</td>
+                    <td class="rubric-cell" data-pts="4">Participación planificada, todos exponen y las transiciones son lineales y ordenadas.</td>
+                    <td class="rubric-cell" data-pts="3">La mayoría planificado. Cambios de expositor con leves variaciones de información.</td>
+                    <td class="rubric-cell" data-pts="2">Poca planificación. En la mayoría de los cambios no se sigue la secuencia del tema.</td>
+                    <td class="rubric-cell" data-pts="1">Desarticulado, falta de colaboración evidente. Solo unos pocos exponen.</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div style="margin-bottom: 15px;">
+            <strong>Observaciones generales de la rúbrica:</strong><br>
+            <textarea placeholder="Comentarios sobre el nivel de logro obtenido..."></textarea>
+        </div>
+
+        <div class="valoracion-box">
+            <div class="valoracion-title">Valoración Final de la Rúbrica</div>
+            <p><strong>Modalidad a calificar:</strong> 
+                <label><input type="radio" name="rubric-type" value="individual" checked onclick="calcularRubrica()"> Individual (6 aspectos - Máx 24 pts)</label> &nbsp;&nbsp;
+                <label><input type="radio" name="rubric-type" value="grupal" onclick="calcularRubrica()"> Grupal (7 aspectos - Máx 28 pts)</label>
+            </p>
+            <hr style="border: 0; border-top: 1px solid #f9fdff; margin: 10px 0;">
+            <p><strong>Puntaje Obtenido:</strong> <span id="total-rubrica" style="font-weight: bold;">0</span> / <span id="max-rubrica-pts">24</span> puntos</p>
+            <p><strong>Regla de 3 aplicada:</strong> <span id="formula-rubrica">(Puntaje obtenido × 10) ÷ 24</span></p>
+            <p><strong>Calificación Final de la Rúbrica:</strong> <span class="calificacion-destacada" id="nota-rubrica">0.00</span> / 10</p>
+        </div>
+    </div>
+
+    <button class="btn-print" onclick="window.print()">Guardar como PDF / Imprimir</button>
+
+    <script>
+        // 1. Controlar las casillas SÍ / NO para que no se puedan marcar ambas a la vez
+        function controlarCheck(checkbox) {
+            const fila = checkbox.closest('tr');
+            const checkboxes = fila.querySelectorAll('input[type="checkbox"]');
+            
+            checkboxes.forEach(cb => {
+                if (cb !== checkbox) cb.checked = false;
+            });
+            
+            calcularListas();
+        }
+
+        // 2. Calcular los totales de las listas de cotejo con Regla de 3
+        function calcularListas() {
+            // Individual (Máximo 11)
+            let rowsInd = document.querySelectorAll('.check-ind[data-tipo="si"]');
+            let ptsInd = 0;
+            rowsInd.forEach(cb => { if(cb.checked) ptsInd++; });
+            document.getElementById('total-ind').innerText = ptsInd;
+            document.getElementById('porcentaje-ind').innerText = Math.round((ptsInd / 11) * 100) + "%";
+            // Regla de 3: (pts * 10) / 11
+            let notaIndCalculada = (ptsInd * 10) / 11;
+            document.getElementById('nota-ind').innerText = notaIndCalculada.toFixed(2);
+
+            // Grupal (Máximo 14)
+            let rowsGrup = document.querySelectorAll('.check-grup[data-tipo="si"]');
+            let ptsGrup = 0;
+            rowsGrup.forEach(cb => { if(cb.checked) ptsGrup++; });
+            document.getElementById('total-grup').innerText = ptsGrup;
+            document.getElementById('porcentaje-grup').innerText = Math.round((ptsGrup / 14) * 100) + "%";
+            // Regla de 3: (pts * 10) / 14
+            let notaGrupCalculada = (ptsGrup * 10) / 14;
+            document.getElementById('nota-grup').innerText = notaGrupCalculada.toFixed(2);
+        }
+
+        // 3. Manejo de clics interactivos en la Rúbrica
+        document.querySelectorAll('.rubric-cell').forEach(cell => {
+            cell.addEventListener('click', function() {
+                const fila = this.closest('tr');
+                // Quitar selección previa de la misma fila
+                fila.querySelectorAll('.rubric-cell').forEach(c => c.classList.remove('selected'));
+                // Marcar la celda actual
+                this.classList.add('selected');
+                
+                calcularRubrica();
+            });
+        });
+
+        // 4. Calcular el puntaje total de la Rúbrica con Regla de 3 dinámica
+        function calcularRubrica() {
+            let total = 0;
+            const esGrupal = document.querySelector('input[name="rubric-type"]:checked').value === 'grupal';
+            const maxPts = esGrupal ? 28 : 24;
+            
+            // Actualizar interfaz con el puntaje máximo correspondiente
+            document.getElementById('max-rubrica-pts').innerText = maxPts;
+            document.getElementById('formula-rubrica').innerText = `(Puntaje obtenido × 10) ÷ ${maxPts}`;
+
+            const celdasSeleccionadas = document.querySelectorAll('.rubric-cell.selected');
+
+            celdasSeleccionadas.forEach(cell => {
+                const esFilaOpcional = cell.closest('tr').classList.contains('optional-row');
+                
+                // Si la evaluación es individual, se ignora por completo la fila de coordinación grupal
+                if (!esGrupal && esFilaOpcional) {
+                    return; 
+                }
+                total += parseInt(cell.getAttribute('data-pts'));
+            });
+
+            document.getElementById('total-rubrica').innerText = total;
+            
+            // Regla de 3 automática para la Rúbrica
+            let notaRubricaCalculada = (total * 10) / maxPts;
+            document.getElementById('nota-rubrica').innerText = notaRubricaCalculada.toFixed(2);
+        }
+    </script>
+</body>
+</html>
